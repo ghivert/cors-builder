@@ -1,4 +1,4 @@
-# cors
+# Simple CORS
 
 ## Middlewares
 
