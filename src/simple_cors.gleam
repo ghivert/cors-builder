@@ -84,7 +84,7 @@ pub fn allow_header(cors: Cors, header: String) {
 }
 
 fn set_allowed_origin(cors: Cors, origin: String) {
-  let hd = "Access-Control-Allow-Origin"
+  let hd = "access-control-allow-origin"
   case cors.allow_origin {
     None -> function.identity
     Some(Wildcard) -> set_header(_, hd, "*")
@@ -98,7 +98,7 @@ fn set_allowed_origin(cors: Cors, origin: String) {
           fn(res) {
             res
             |> set_header(hd, origin)
-            |> set_header("Vary", "Origin")
+            |> set_header("vary", "origin")
           }
         }
       }
@@ -107,22 +107,23 @@ fn set_allowed_origin(cors: Cors, origin: String) {
 }
 
 fn set_expose_headers(res: Response(body), cors: Cors) {
-  let hd = "Access-Control-Expose-Headers"
-  cors.expose_headers
-  |> set.to_list()
+  let hd = "access-control-expose-headers"
+  let ls = set.to_list(cors.expose_headers)
+  use <- bool.guard(when: list.is_empty(ls), return: res)
+  ls
   |> string.join(",")
   |> set_header(res, hd, _)
 }
 
 fn set_max_age(res: Response(body), cors: Cors) {
-  let hd = "Access-Control-Max-Age"
+  let hd = "access-control-max-age"
   cors.max_age
   |> option.map(fn(a) { set_header(res, hd, int.to_string(a)) })
   |> option.unwrap(res)
 }
 
 fn set_allow_credentials(res: Response(body), cors: Cors) {
-  let hd = "Access-Control-Allow-Credentials"
+  let hd = "access-control-allow-credentials"
   cors.allow_credentials
   |> option.map(fn(_) { set_header(res, hd, "true") })
   |> option.unwrap(res)
@@ -144,20 +145,17 @@ fn method_to_string(method: Method) {
 }
 
 fn set_allow_methods(res: Response(body), cors: Cors) {
-  let hd = "Access-Control-Allow-Methods"
+  let hd = "access-control-allow-methods"
   let methods = set.to_list(cors.allow_methods)
-  case list.is_empty(methods) {
-    True -> res
-    False ->
-      methods
-      |> list.map(method_to_string)
-      |> string.join(",")
-      |> set_header(res, hd, _)
-  }
+  use <- bool.guard(when: list.is_empty(methods), return: res)
+  methods
+  |> list.map(method_to_string)
+  |> string.join(",")
+  |> set_header(res, hd, _)
 }
 
 fn set_allow_headers(res: Response(body), cors: Cors) {
-  let hd = "Access-Control-Allow-Headers"
+  let hd = "access-control-allow-headers"
   let headers = set.to_list(cors.allow_headers)
   case list.is_empty(headers) {
     True -> res
@@ -188,7 +186,7 @@ pub fn set_cors_origin(res: Response(response), cors: Cors, origin: String) {
 
 fn find_origin(req: Request(connection)) {
   req.headers
-  |> list.find(fn(h) { pair.first(h) == "Origin" })
+  |> list.find(fn(h) { pair.first(h) == "origin" })
   |> result.map(pair.second)
   |> result.unwrap("")
 }
