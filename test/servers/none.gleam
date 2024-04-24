@@ -1,8 +1,8 @@
+import cors_builder as cors
 import gleam/bytes_builder
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import mist.{type Connection, type ResponseData}
-import simple_cors as cors
 
 pub fn run(req: Request(Connection)) -> Response(ResponseData) {
   use _req <- cors.mist_handle(req, cors.new())

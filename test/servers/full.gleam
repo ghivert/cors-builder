@@ -1,9 +1,9 @@
+import cors_builder as cors
 import gleam/bytes_builder
 import gleam/http
 import gleam/http/request.{type Request}
 import gleam/http/response
 import mist.{type Connection}
-import simple_cors as cors
 
 fn cors() {
   cors.new()
@@ -11,7 +11,7 @@ fn cors() {
   |> cors.allow_origin("http://localhost:4000")
   |> cors.allow_method(http.Get)
   |> cors.allow_method(http.Post)
-  |> cors.expose_headers("content-type")
+  |> cors.expose_header("content-type")
   |> cors.max_age(200)
   |> cors.allow_credentials()
   |> cors.allow_header("content-type")

@@ -1,11 +1,33 @@
-# Simple CORS
+# CORS Builder
 
-## Middlewares
+> Before diving in CORS, [make sure you're aware of security advices](#) and see
+> if you can't just use a simple proxy to avoid CORS! It's a better and more
+> secure way to manage CORS!
+
+Manipulating CORS is often a pain for developers, and always a little blurry, to
+understand what should be done, how it should be configured, etc. CORS Builder
+abstract the complexity while trying to remains simple, and friendly warns you
+when something is wrong.
+
+CORS Builder is compatible with every servers, as long as you're using the
+[`gleam_http`](https://hexdocs.pm/gleam_http) `Response` as a foundation.
+However, to simplify your development, two middlewares are provided
+out-of-the-box:
+[`wisp_handle`](https://hexdocs.pm/cors_builder/cors_builder#wisp_handle) and
+[`mist_handle`](https://hexdocs.pm/cors_builder/cors_builder#mist_handle) to
+integrate nicely in `wisp` and `mist`. You should never have to worry about CORS
+again! Use the package, configure your CORS, and everything should work
+smoothly!
+
+## Quickstart
+
+You can interchange `wisp_handle` with `mist_handle` if you're using `wisp` or
+`mist`.
 
 ```gleam
+import cors_builder as cors
 import gleam/http
 import mist
-import simple_cors as cors
 import wisp.{type Request, type Response}
 
 fn cors() {
@@ -30,7 +52,47 @@ fn main() {
 }
 ```
 
-## What is CORS?
+## More details & notes about security
+
+CORS are often badly understood, however they're full parts of the web stack
+when working with browsers, and they're part of security measures, to avoid
+users' browsers behaving badly.
+
+CORS intervene when browsers have to manage with cross-origin requests. A
+cross-origin request is a request coming from a different domain than the domain
+you're currently on. Imagine you're browsing your favorite website, like
+[packages.gleam.run](https://packages.gleam.run), and suddenlly, your browser
+want to query [google.com](https://google.com) in an async way. Because you're
+not on Google, the browser will identify your request as a cross-origin request.
+Some more security measures have to be taken to make sure the request is valid.
+That's where CORS comes into play. CORS stands for Cross-Origin Resource
+Sharing. It means it's a way to authorize cross-origin requests, to allow
+outside clients to access the desired resources.
+
+This mechanism is a way to prevent browsers to ask for data on behalf of a user,
+in an undesired way. It's up to you, when developping your server, to make sure
+only authentified, regular users can access your service. **It is a bad idea to
+let everyone access your data directly from a browser.** You should identify who
+can access your service, and how, that's what CORS are made for. Most of the
+time, you want your frontend to access your backend, and nothing else. You can
+simply identify those domains, and add them in your CORS configuration. Let's
+imagine your frontend is hosted on `https://frontend.app` and your backend on
+`https://backend.app`. You can configure your CORS to _only_ accept
+`https://frontend.app`. That way, every request coming from another domain will
+be rejected, and only your users will be accepted.
+
+Keep in mind that CORS will never trigger as long as your frontend query the
+same domain where it resides. When your frontend queries
+`https://frontend.app/api/path` for example, because your frontend resides on
+`https://frontend.app`, no cross-origin request is identified, so CORS won't
+comes into play. So always think about this, and see if you can just host your
+frontend at the same address as your backend. This can be achieved using a
+proxy, and this should be soon available in lustre dev tools, and is already
+available if you're using
+[Vite](https://vitejs.dev/config/server-options#server-proxy) or
+[Webpack](https://webpack.js.org/configuration/dev-server/#devserverproxy)!
+
+## How are CORS working?
 
 Browsers apply a simple rules for every HTTP request: when the request
 originates from a different origin than the target server URL — and if it's not
@@ -106,3 +168,9 @@ headers:
   talking with the server.
 - `Access-Control-Request-Header` contains the desired headers that the request
   want to have.
+
+## Contributing
+
+You love the package and want to improve it? You have a shiny new framework and
+want to provide an integration with CORS in this package? Every contribution is
+welcome! Feel free to open a Pull Request, and let's discuss about it!

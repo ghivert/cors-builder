@@ -1,9 +1,9 @@
+import cors_builder as cors
 import gleam/bytes_builder
 import gleam/http
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response}
 import mist.{type Connection, type ResponseData}
-import simple_cors as cors
 
 fn cors() {
   cors.new()
