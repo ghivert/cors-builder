@@ -62,6 +62,7 @@ import gleam/pair
 import gleam/result
 import gleam/set.{type Set}
 import gleam/string
+import gleam/uri
 import mist
 import wisp
 
@@ -110,6 +111,15 @@ pub fn allow_all_origins(cors: Cors) {
   Cors(..cors, allow_origin: allow_origin)
 }
 
+fn invalid_uri(origin: String) {
+  uri.parse(origin)
+  |> result.is_ok()
+  |> function.tap(fn(value) {
+    use <- bool.guard(when: value, return: Nil)
+    io.println("Your provided origin: \"" <> origin <> "\" is not a valid URI.")
+  })
+}
+
 /// Allow a specific domain to access your server.
 /// You can specify multiple domains to access your server. In this case, call
 /// the function multiple times on `Cors` data.
@@ -120,6 +130,7 @@ pub fn allow_all_origins(cors: Cors) {
 ///   |> cors.allow_origin("domain2")
 /// }
 pub fn allow_origin(cors: Cors, origin: String) {
+  use <- bool.guard(when: invalid_uri(origin), return: cors)
   let allow_origin = case cors.allow_origin {
     Some(Wildcard) -> Some(Wildcard)
     Some(Origin(content)) -> Some(Origin(set.insert(content, origin)))
