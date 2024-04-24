@@ -1,8 +1,9 @@
 # CORS Builder
 
-> Before diving in CORS, [make sure you're aware of security advices](#) and see
-> if you can't just use a simple proxy to avoid CORS! It's a better and more
-> secure way to manage CORS!
+> [!WARNING] Before diving in CORS,
+> [make sure you're aware of security advices](#more-details--notes-about-security)
+> and see if you can't just use a simple proxy to avoid CORS! It's a better and
+> more secure way to manage CORS!
 
 Manipulating CORS is often a pain for developers, and always a little blurry, to
 understand what should be done, how it should be configured, etc. CORS Builder
