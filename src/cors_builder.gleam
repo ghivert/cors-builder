@@ -120,7 +120,9 @@ fn invalid_uri(origin: String) {
   })
 }
 
-/// Allow a specific domain to access your server.
+/// Allow a specific domain to access your server. The domain must be a valid
+/// URI, conformant to RFC 3986. In case it's not conformant, a warning will be
+/// emitted, and Cors won't be changed.
 /// You can specify multiple domains to access your server. In this case, call
 /// the function multiple times on `Cors` data.
 /// ```
