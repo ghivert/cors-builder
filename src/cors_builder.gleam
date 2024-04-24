@@ -102,6 +102,7 @@ pub fn new() -> Cors {
 }
 
 /// Allow all domains to access your server.
+///
 /// Be extremely careful, you should not use this function in production!
 /// Allowing all origins can easily be a huge security flaw!
 /// Allow only the origins you need, and use this function only locally,
@@ -167,6 +168,7 @@ pub fn max_age(cors: Cors, age: Int) {
 
 /// Allow credentials to be sent in the request. Credentials take form of
 /// username and password, stored in cookies most of the time.
+///
 /// Be extremely careful with this header, and consider it with caution, mainly
 /// for legacy systems relying on cookies or for systems aware of the danger of
 /// cookies, because of [CSRF attacks](https://developer.mozilla.org/en-US/docs/Glossary/CSRF).
