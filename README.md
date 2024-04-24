@@ -1,7 +1,7 @@
 # CORS Builder
 
-> [!WARNING]
->
+<!-- prettier-ignore -->
+> [!IMPORTANT]
 > Before diving in CORS,
 > [make sure you're aware of security advices](#more-details--notes-about-security)
 > and see if you can't just use a simple proxy to avoid CORS! It's a better and
