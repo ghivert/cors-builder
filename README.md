@@ -17,9 +17,10 @@ CORS Builder is compatible with every servers, as long as you're using the
 [`gleam_http`](https://hexdocs.pm/gleam_http) `Response` as a foundation.
 However, to simplify your development, two middlewares are provided
 out-of-the-box:
-[`wisp_handle`](https://hexdocs.pm/cors_builder/cors_builder#wisp_handle) and
-[`mist_handle`](https://hexdocs.pm/cors_builder/cors_builder#mist_handle) to
-integrate nicely in [`wisp`](https://hexdocs.pm/wisp) and
+[`wisp_handle`](https://hexdocs.pm/cors_builder/cors_builder.html#wisp_handle)
+and
+[`mist_handle`](https://hexdocs.pm/cors_builder/cors_builder.html#mist_handle)
+to integrate nicely in [`wisp`](https://hexdocs.pm/wisp) and
 [`mist`](https://hexdocs.pm/mist). You should never have to worry about CORS
 again! Use the package, configure your CORS, and everything should work
 smoothly!
