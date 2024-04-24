@@ -5,7 +5,8 @@
 > Before diving in CORS,
 > [make sure you're aware of security advices](#more-details--notes-about-security)
 > and see if you can't just use a simple proxy to avoid CORS! It's a better and
-> more secure way to manage CORS!
+> more secure way to manage CORS! Always secure correctly your CORS, and use
+> them sparingly, when needed.
 
 Manipulating CORS is often a pain for developers, and always a little blurry, to
 understand what should be done, how it should be configured, etc. CORS Builder
@@ -106,9 +107,9 @@ a simple request — the browser needs to authorize the cross-origin call.
 > conditions:
 >
 > - Allowed methods are `GET`, `HEAD` or `POST`
-> - Allowed headers are `Accept`, `Accept-Language`, `Content-Language` and
->   `Content-Type`
-> - `Content-Type` should be:
+> - Allowed headers are `accept`, `accept-language`, `content-language` and
+>   `content-type`
+> - `content-type` should be:
 >   - `application/x-www-form-urlencoded`
 >   - `multipart/form-data`
 >   - `text/plain`
@@ -133,8 +134,12 @@ issuer (the caller) and the headers responded by the server.
 
 > [!NOTE]
 >
-> In HTTP2, all headers keys have to be lowercase, and gleam/http will enforce
-> this. All headers keys in this guide will be written in lowercase.
+> In HTTP, all headers keys are case-insensitive. It means all headers can be
+> written as `content-type` or `Content-Type` or even `CONTENT-type`. By
+> convention, they're written as `Content-Type`. In HTTP2 though, all headers
+> keys have to be lowercase or the requests are rejected, and `gleam_http` will
+> enforce this behaviour. All headers keys in this guide will be written in
+> lowercase. On the internet you could still see both way of writing them.
 
 ### Response headers
 
@@ -146,7 +151,7 @@ response headers:
 - `access-control-allow-origin`, indicates which origins are allowed to access
   the server. It can be a joker (`"*"`) or a unique domain
   (`https://gleam.run`). It cannot contains multiple domains, but can response
-  to multiple different domains with the `VARY` header. You should not have to
+  to multiple different domains with the `vary` header. You should not have to
   take care of this, because the library provides it for you.
 - `access-control-expose-headers`, provides a whitelist of allowed headers for
   the browsers. Only the headers in the whitelist will be able to be used in the
