@@ -113,9 +113,9 @@ pub fn allow_all_origins(cors: Cors) {
 
 fn invalid_uri(origin: String) {
   uri.parse(origin)
-  |> result.is_ok()
+  |> result.is_error()
   |> function.tap(fn(value) {
-    use <- bool.guard(when: value, return: Nil)
+    use <- bool.guard(when: !value, return: Nil)
     io.println("Your provided origin: \"" <> origin <> "\" is not a valid URI.")
   })
 }
