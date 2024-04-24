@@ -1,7 +1,7 @@
 # CORS Builder
 
-<!-- prettier-ignore -->
 > [!IMPORTANT]
+>
 > Before diving in CORS,
 > [make sure you're aware of security advices](#more-details--notes-about-security)
 > and see if you can't just use a simple proxy to avoid CORS! It's a better and
@@ -18,7 +18,8 @@ However, to simplify your development, two middlewares are provided
 out-of-the-box:
 [`wisp_handle`](https://hexdocs.pm/cors_builder/cors_builder#wisp_handle) and
 [`mist_handle`](https://hexdocs.pm/cors_builder/cors_builder#mist_handle) to
-integrate nicely in `wisp` and `mist`. You should never have to worry about CORS
+integrate nicely in [`wisp`](https://hexdocs.pm/wisp) and
+[`mist`](https://hexdocs.pm/mist). You should never have to worry about CORS
 again! Use the package, configure your CORS, and everything should work
 smoothly!
 
@@ -119,7 +120,7 @@ To authorize the call, the browser will issue a first request, called a
 "preflight" request. This request takes the form of an `OPTIONS` request, which
 should be answered positively by the server (meaning the response status code
 should be 2XX) and should contains the appropriate CORS headers
-(`Access-Control` headers).
+(`access-control` headers).
 
 In case the preflight request is not successful, the server will simply cancel
 the HTTP request. But if the preflight request is successful, then the browser
@@ -130,6 +131,11 @@ will then launch the real request, and the server will be able to handle it.
 We distinguish different types of headers: the headers concerning the request
 issuer (the caller) and the headers responded by the server.
 
+> [!NOTE]
+>
+> In HTTP2, all headers keys have to be lowercase, and gleam/http will enforce
+> this. All headers keys in this guide will be written in lowercase.
+
 ### Response headers
 
 Response headers are not automatically set by the server, and you should handle
@@ -137,24 +143,24 @@ them according on what you want to do. This package tries to abstract it to
 simplify your development and let you focus on your application. We count 6 CORS
 response headers:
 
-- `Access-Control-Allow-Origin`, indicates which origins are allowed to access
+- `access-control-allow-origin`, indicates which origins are allowed to access
   the server. It can be a joker (`"*"`) or a unique domain
   (`https://gleam.run`). It cannot contains multiple domains, but can response
   to multiple different domains with the `VARY` header. You should not have to
   take care of this, because the library provides it for you.
-- `Access-Control-Expose-Headers`, provides a whitelist of allowed headers for
+- `access-control-expose-headers`, provides a whitelist of allowed headers for
   the browsers. Only the headers in the whitelist will be able to be used in the
   response object in the JS code. It means if the response contains headers you
   want to cache to the client, you can use this header.
-- `Access-Control-Max-Age`, allows to put the preflight response in cache, for a
+- `access-control-max-age`, allows to put the preflight response in cache, for a
   specified amount of time. This avoids to rerun the `OPTIONS` request multiple
   times.
-- `Access-Control-Allow-Credentials`, allows the request to includes credentials
+- `access-control-allow-credentials`, allows the request to includes credentials
   authorizations. This can expose you to CSRF attack. Never activate this option
   unless you carefully know what you're doing.
-- `Access-Control-Allow-Methods`, provides a whitelist of subsequent authorized
+- `access-control-allow-methods`, provides a whitelist of subsequent authorized
   methods in the future requests.
-- `Access-Control-Allow-Headers`, indicates which headers are accepted by the
+- `access-control-allow-headers`, indicates which headers are accepted by the
   server, and thus, which headers the browser will be able to send in subsequent
   requests.
 
@@ -165,11 +171,11 @@ request with `XMLHttpRequest` or `fetch`. You should not bother about it, but
 they're still referenced it, in case you encounter them.We count 3 CORS request
 headers:
 
-- `Origin` contains the origin of the request. The browser will _always_ fill
+- `origin` contains the origin of the request. The browser will _always_ fill
   this header automatically.
-- `Access-Control-Request-Method` contains the desired methods to use when
+- `access-control-request-method` contains the desired methods to use when
   talking with the server.
-- `Access-Control-Request-Header` contains the desired headers that the request
+- `access-control-request-header` contains the desired headers that the request
   want to have.
 
 ## Contributing
