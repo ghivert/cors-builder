@@ -352,7 +352,7 @@ fn find_origin(req: Request(connection)) {
   req.headers
   |> list.find(fn(h) { pair.first(h) == "origin" })
   |> result.map(pair.second)
-  |> result.unwrap("")
+  |> option.from_result()
 }
 
 fn middleware(
@@ -367,7 +367,8 @@ fn middleware(
   }
   req
   |> find_origin()
-  |> set_cors_multiple_origin(res, cors, _)
+  |> option.map(set_cors_multiple_origin(res, cors, _))
+  |> option.unwrap(res)
 }
 
 /// Intercepts the request for mist and handles CORS directly without worrying
