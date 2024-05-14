@@ -17,9 +17,9 @@ CORS Builder is compatible with every servers, as long as you're using the
 [`gleam_http`](https://hexdocs.pm/gleam_http) `Response` as a foundation.
 However, to simplify your development, two middlewares are provided
 out-of-the-box:
-[`wisp_handle`](https://hexdocs.pm/cors_builder/cors_builder.html#wisp_handle)
+[`wisp_middleware`](https://hexdocs.pm/cors_builder/cors_builder.html#wisp_middleware)
 and
-[`mist_handle`](https://hexdocs.pm/cors_builder/cors_builder.html#mist_handle)
+[`mist_middleware`](https://hexdocs.pm/cors_builder/cors_builder.html#mist_middleware)
 to integrate nicely in [`wisp`](https://hexdocs.pm/wisp) and
 [`mist`](https://hexdocs.pm/mist). You should never have to worry about CORS
 again! Use the package, configure your CORS, and everything should work
@@ -27,8 +27,8 @@ smoothly!
 
 ## Quickstart
 
-You can interchange `wisp_handle` with `mist_handle` if you're using `wisp` or
-`mist`.
+You can interchange `wisp_middleware` with `mist_middleware` if you're using
+`wisp` or `mist`.
 
 ```gleam
 import cors_builder as cors
@@ -45,13 +45,13 @@ fn cors() {
 }
 
 fn handler(req: Request) -> Response {
-  use req <- cors.wisp_handle(req, cors())
+  use req <- cors.wisp_middleware(req, cors())
   wisp.ok()
 }
 
 fn main() {
   handler
-  |> wisp.mist_handler(secret_key)
+  |> wisp.mist_middlewarer(secret_key)
   |> mist.new()
   |> mist.port(3000)
   |> mist.start_http()

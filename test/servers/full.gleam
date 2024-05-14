@@ -18,7 +18,7 @@ fn cors() {
 }
 
 pub fn run(req: Request(Connection)) {
-  use _req <- cors.mist_handle(req, cors())
+  use _req <- cors.mist_middleware(req, cors())
   let empty = mist.Bytes(bytes_builder.new())
   response.new(200)
   |> response.set_body(empty)

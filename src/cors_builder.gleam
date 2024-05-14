@@ -23,7 +23,7 @@
 //// }
 ////
 //// fn handler(req: Request) -> Response {
-////   use req <- cors.wisp_handle(req, cors())
+////   use req <- cors.wisp_middleware(req, cors())
 ////   wisp.ok()
 //// }
 ////
@@ -328,7 +328,7 @@ fn set_response(res: Response(body), cors: Cors, origin: Option(String)) {
 /// Set CORS headers on a response. Should be used in your handler.
 /// In case you're using a framework, it probably already implements it.
 /// If you're using mist or wisp, use the corresponding provided middlewares,
-/// ([mist_handle](#mist_handle)) and ([wisp_handle](#wisp_handle)) and do not
+/// ([mist_middleware](#mist_middleware)) and ([wisp_middleware](#wisp_middleware)) and do not
 /// use this "low-level" function.
 pub fn set_cors(res: Response(response), cors: Cors) {
   set_response(res, cors, None)
@@ -338,7 +338,7 @@ pub fn set_cors(res: Response(response), cors: Cors) {
 /// allowed domains. Should be used in your handler.
 /// In case you're using a framework, it probably already implements it.
 /// If you're using mist or wisp, use the corresponding provided middlewares,
-/// ([mist_handle](#mist_handle)) and ([wisp_handle](#wisp_handle)) and do not
+/// ([mist_middleware](#mist_middleware)) and ([wisp_middleware](#wisp_middleware)) and do not
 /// use this "low-level" function.
 pub fn set_cors_multiple_origin(
   res: Response(response),
@@ -373,7 +373,7 @@ fn middleware(
 
 /// Intercepts the request for mist and handles CORS directly without worrying
 /// about it. Provide your CORS configuration, and you're good to go!
-pub fn mist_handle(
+pub fn mist_middleware(
   req: Request(mist.Connection),
   cors: Cors,
   handler: fn(Request(mist.Connection)) -> Response(mist.ResponseData),
@@ -385,7 +385,7 @@ pub fn mist_handle(
 
 /// Intercepts the request for wisp and handles CORS directly without worrying
 /// about it. Provide your CORS configuration and you're good to go!
-pub fn wisp_handle(
+pub fn wisp_middleware(
   req: wisp.Request,
   cors: Cors,
   handler: fn(wisp.Request) -> wisp.Response,
