@@ -157,7 +157,7 @@ pub fn expose_header(cors: Cors, header: String) {
   Cors(..cors, expose_headers: expose_headers)
 }
 
-/// Set an amount of milliseconds during which CORS requests can be cached.
+/// Set an amount of seconds during which CORS requests can be cached.
 /// When using `max_age`, the browser will issue one request `OPTIONS` at first,
 /// and will reuse the result of that request for the specified amount of time.
 /// Once the cache expired, a new `OPTIONS` request will be made.
