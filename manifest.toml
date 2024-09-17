@@ -34,5 +34,5 @@ gleam_http = { version = ">= 3.6.0 and < 4.0.0" }
 gleam_httpc = { version = ">= 2.2.0 and < 3.0.0" }
 gleam_stdlib = { version = ">= 0.34.0 and < 2.0.0" }
 gleeunit = { version = ">= 1.0.0 and < 2.0.0" }
-mist = { version = ">= 1.2.0 and < 2.0.0" }
+mist = { version = ">= 1.2.0 and < 3.0.0" }
 wisp = { version = ">= 1.0.0 and < 2.0.0" }
