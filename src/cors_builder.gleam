@@ -49,7 +49,7 @@
 //// jumping right in your custom code.
 
 import gleam/bool
-import gleam/bytes_builder
+import gleam/bytes_tree
 import gleam/function
 import gleam/http.{type Method}
 import gleam/http/request.{type Request}
@@ -378,7 +378,7 @@ pub fn mist_middleware(
   cors: Cors,
   handler: fn(Request(mist.Connection)) -> Response(mist.ResponseData),
 ) {
-  bytes_builder.new()
+  bytes_tree.new()
   |> mist.Bytes()
   |> middleware(req, cors, handler)
 }
