@@ -1,5 +1,5 @@
 import cors_builder as cors
-import gleam/bytes_builder
+import gleam/bytes_tree
 import gleam/http
 import gleam/http/request.{type Request}
 import gleam/http/response
@@ -19,7 +19,7 @@ fn cors() {
 
 pub fn run(req: Request(Connection)) {
   use _req <- cors.mist_middleware(req, cors())
-  let empty = mist.Bytes(bytes_builder.new())
+  let empty = mist.Bytes(bytes_tree.new())
   response.new(200)
   |> response.set_body(empty)
 }
