@@ -1,3 +1,7 @@
+## v2.0.5 - 2025-06-25
+
+- Relax constraint of `mist`, to allow `4.0.0` and `5.0.0` versions.
+
 ## v2.0.4 - 2025-02-27
 
 - Patch update, no changes public API, no changes expected in your codebase.
@@ -7,12 +11,13 @@
 
 - Patch update, no changes public API, no changes expected in your codebase.
 - Update [`mist`](https://hex.pm/packages/mist) dependency to >= 4.0.0. \
-  [`mist`](https://hex.pm/packages/mist) regularly updates accordingly with the standard
-  library.
+  [`mist`](https://hex.pm/packages/mist) regularly updates accordingly with the
+  standard library.
 - Update stdlib dependency to >= 0.42.0. \
-  Because the standard library is still subject to breaking changes, some new versions
-  update can still occur in the library. Below version 0.42.0, please, stay on version
-  2.0.2, which is still working great (but miss `bytes_tree` and `string_tree`).
+  Because the standard library is still subject to breaking changes, some new
+  versions update can still occur in the library. Below version 0.42.0, please,
+  stay on version 2.0.2, which is still working great (but miss `bytes_tree` and
+  `string_tree`).
 
 ## v2.0.2 - 2024-10-14
 
