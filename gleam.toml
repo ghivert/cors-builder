@@ -9,7 +9,7 @@ repository = { type = "github", user = "ghivert", repo = "cors-builder" }
 [dependencies]
 gleam_http = ">= 3.6.0 and < 5.0.0"
 gleam_stdlib = ">= 0.42.0 and < 2.0.0"
-wisp = ">= 1.0.0 and < 2.0.0"
+wisp = ">= 2.0.0 and < 3.0.0"
 mist = ">= 4.0.0 and < 6.0.0"
 
 [dev-dependencies]
