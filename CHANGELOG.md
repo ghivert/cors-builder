@@ -1,3 +1,7 @@
+## v2.0.6 - 2025-09-11
+
+- Add compatibility with wisp 2.0.0
+
 ## v2.0.5 - 2025-06-25
 
 - Relax constraint of `mist`, to allow `4.0.0` and `5.0.0` versions.
