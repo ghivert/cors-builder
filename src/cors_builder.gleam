@@ -390,5 +390,5 @@ pub fn wisp_middleware(
   cors: Cors,
   handler: fn(wisp.Request) -> wisp.Response,
 ) {
-  middleware(wisp.Text(""), req, cors, handler)
+  middleware(wisp.Bytes(bytes_tree.from_string("")), req, cors, handler)
 }
