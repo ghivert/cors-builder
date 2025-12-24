@@ -1,3 +1,7 @@
+## v2.0.7 - 2025-12-24
+
+- Remove deprecations calls.
+
 ## v2.0.6 - 2025-09-11
 
 - Add compatibility with wisp 2.0.0

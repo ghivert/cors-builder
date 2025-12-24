@@ -1,4 +1,4 @@
-import gleam/function
+import cors_builder/internal/function
 import gleam/http
 import gleam/http/request
 import gleam/list

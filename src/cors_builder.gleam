@@ -48,9 +48,9 @@
 //// to get you started. It's better to familiarize with the ecosystem before
 //// jumping right in your custom code.
 
+import cors_builder/internal/function
 import gleam/bool
 import gleam/bytes_tree
-import gleam/function
 import gleam/http.{type Method}
 import gleam/http/request.{type Request}
 import gleam/http/response.{type Response, set_header}
