@@ -107,12 +107,12 @@ pub fn new() -> Cors {
 /// Allowing all origins can easily be a huge security flaw!
 /// Allow only the origins you need, and use this function only locally,
 /// in dev mode.
-pub fn allow_all_origins(cors: Cors) {
+pub fn allow_all_origins(cors: Cors) -> Cors {
   let allow_origin = Some(Wildcard)
   Cors(..cors, allow_origin: allow_origin)
 }
 
-fn invalid_uri(origin: String) {
+fn invalid_uri(origin: String) -> Bool {
   uri.parse(origin)
   |> result.is_error()
   |> function.tap(fn(value) {
@@ -132,7 +132,7 @@ fn invalid_uri(origin: String) {
 ///   |> cors.allow_origin("domain")
 ///   |> cors.allow_origin("domain2")
 /// }
-pub fn allow_origin(cors: Cors, origin: String) {
+pub fn allow_origin(cors: Cors, origin: String) -> Cors {
   use <- bool.guard(when: invalid_uri(origin), return: cors)
   let allow_origin = case cors.allow_origin {
     Some(Wildcard) -> Some(Wildcard)
@@ -152,7 +152,7 @@ pub fn allow_origin(cors: Cors, origin: String) {
 ///   |> cors.expose_header("vary")
 /// }
 /// ```
-pub fn expose_header(cors: Cors, header: String) {
+pub fn expose_header(cors: Cors, header: String) -> Cors {
   let expose_headers = set.insert(cors.expose_headers, header)
   Cors(..cors, expose_headers: expose_headers)
 }
@@ -161,7 +161,7 @@ pub fn expose_header(cors: Cors, header: String) {
 /// When using `max_age`, the browser will issue one request `OPTIONS` at first,
 /// and will reuse the result of that request for the specified amount of time.
 /// Once the cache expired, a new `OPTIONS` request will be made.
-pub fn max_age(cors: Cors, age: Int) {
+pub fn max_age(cors: Cors, age: Int) -> Cors {
   let max_age = Some(age)
   Cors(..cors, max_age: max_age)
 }
@@ -179,7 +179,7 @@ pub fn max_age(cors: Cors, age: Int) {
 /// framework doing the authentication for you. A simple and secured way to
 /// authenticate your users is to use the `authorization` header, with a `Bearer`
 /// token.
-pub fn allow_credentials(cors: Cors) {
+pub fn allow_credentials(cors: Cors) -> Cors {
   let allow_credentials = Some(True)
   Cors(..cors, allow_credentials: allow_credentials)
 }
@@ -196,7 +196,7 @@ pub fn allow_credentials(cors: Cors) {
 ///   |> cors.allow_method(http.Post)
 /// }
 /// ```
-pub fn allow_method(cors: Cors, method: Method) {
+pub fn allow_method(cors: Cors, method: Method) -> Cors {
   let allow_methods = set.insert(cors.allow_methods, method)
   Cors(..cors, allow_methods: allow_methods)
 }
@@ -211,7 +211,7 @@ pub fn allow_method(cors: Cors, method: Method) {
 ///   |> cors.allow_header("origin")
 /// }
 /// ```
-pub fn allow_header(cors: Cors, header: String) {
+pub fn allow_header(cors: Cors, header: String) -> Cors {
   let allow_headers = set.insert(cors.allow_headers, header)
   Cors(..cors, allow_headers: allow_headers)
 }
@@ -219,7 +219,7 @@ pub fn allow_header(cors: Cors, header: String) {
 // Set functions
 // Used internally to simplify the CORS apply.
 
-fn warn_if_origin_empty(origin: String) {
+fn warn_if_origin_empty(origin: String) -> Nil {
   case origin {
     "" ->
       io.println(
@@ -229,7 +229,10 @@ fn warn_if_origin_empty(origin: String) {
   }
 }
 
-fn set_allowed_origin(cors: Cors, origin: String) {
+fn set_allowed_origin(
+  cors: Cors,
+  origin: String,
+) -> fn(Response(a)) -> Response(a) {
   let hd = "access-control-allow-origin"
   case cors.allow_origin {
     None -> function.identity
@@ -253,7 +256,7 @@ fn set_allowed_origin(cors: Cors, origin: String) {
   }
 }
 
-fn set_expose_headers(res: Response(body), cors: Cors) {
+fn set_expose_headers(res: Response(body), cors: Cors) -> Response(body) {
   let hd = "access-control-expose-headers"
   let ls = set.to_list(cors.expose_headers)
   use <- bool.guard(when: list.is_empty(ls), return: res)
@@ -262,21 +265,21 @@ fn set_expose_headers(res: Response(body), cors: Cors) {
   |> set_header(res, hd, _)
 }
 
-fn set_max_age(res: Response(body), cors: Cors) {
+fn set_max_age(res: Response(body), cors: Cors) -> Response(body) {
   let hd = "access-control-max-age"
   cors.max_age
   |> option.map(fn(a) { set_header(res, hd, int.to_string(a)) })
   |> option.unwrap(res)
 }
 
-fn set_allow_credentials(res: Response(body), cors: Cors) {
+fn set_allow_credentials(res: Response(body), cors: Cors) -> Response(body) {
   let hd = "access-control-allow-credentials"
   cors.allow_credentials
   |> option.map(fn(_) { set_header(res, hd, "true") })
   |> option.unwrap(res)
 }
 
-fn method_to_string(method: Method) {
+fn method_to_string(method: Method) -> String {
   case method {
     http.Get -> "GET"
     http.Post -> "POST"
@@ -291,7 +294,7 @@ fn method_to_string(method: Method) {
   }
 }
 
-fn set_allow_methods(res: Response(body), cors: Cors) {
+fn set_allow_methods(res: Response(body), cors: Cors) -> Response(body) {
   let hd = "access-control-allow-methods"
   let methods = set.to_list(cors.allow_methods)
   use <- bool.guard(when: list.is_empty(methods), return: res)
@@ -301,7 +304,7 @@ fn set_allow_methods(res: Response(body), cors: Cors) {
   |> set_header(res, hd, _)
 }
 
-fn set_allow_headers(res: Response(body), cors: Cors) {
+fn set_allow_headers(res: Response(body), cors: Cors) -> Response(body) {
   let hd = "access-control-allow-headers"
   let headers = set.to_list(cors.allow_headers)
   case list.is_empty(headers) {
@@ -313,7 +316,11 @@ fn set_allow_headers(res: Response(body), cors: Cors) {
   }
 }
 
-fn set_response(res: Response(body), cors: Cors, origin: Option(String)) {
+fn set_response(
+  res: Response(body),
+  cors: Cors,
+  origin: Option(String),
+) -> Response(body) {
   res
   |> set_allowed_origin(cors, option.unwrap(origin, ""))
   |> set_expose_headers(cors)
@@ -330,7 +337,7 @@ fn set_response(res: Response(body), cors: Cors, origin: Option(String)) {
 /// If you're using mist or wisp, use the corresponding provided middlewares,
 /// ([mist_middleware](#mist_middleware)) and ([wisp_middleware](#wisp_middleware)) and do not
 /// use this "low-level" function.
-pub fn set_cors(res: Response(response), cors: Cors) {
+pub fn set_cors(res: Response(response), cors: Cors) -> Response(response) {
   set_response(res, cors, None)
 }
 
@@ -344,11 +351,11 @@ pub fn set_cors_multiple_origin(
   res: Response(response),
   cors: Cors,
   origin: String,
-) {
+) -> Response(response) {
   set_response(res, cors, Some(origin))
 }
 
-fn find_origin(req: Request(connection)) {
+fn find_origin(req: Request(connection)) -> Option(String) {
   req.headers
   |> list.find(fn(h) { pair.first(h) == "origin" })
   |> result.map(pair.second)
@@ -360,7 +367,7 @@ fn middleware(
   req: Request(connection),
   cors: Cors,
   handler: fn(Request(connection)) -> Response(resdata),
-) {
+) -> Response(resdata) {
   let res = case req.method {
     http.Options -> response.set_body(response.new(204), empty)
     _ -> handler(req)
@@ -377,7 +384,7 @@ pub fn mist_middleware(
   req: Request(mist.Connection),
   cors: Cors,
   handler: fn(Request(mist.Connection)) -> Response(mist.ResponseData),
-) {
+) -> Response(mist.ResponseData) {
   bytes_tree.new()
   |> mist.Bytes()
   |> middleware(req, cors, handler)
@@ -389,6 +396,6 @@ pub fn wisp_middleware(
   req: wisp.Request,
   cors: Cors,
   handler: fn(wisp.Request) -> wisp.Response,
-) {
+) -> Response(wisp.Body) {
   middleware(wisp.Bytes(bytes_tree.from_string("")), req, cors, handler)
 }
