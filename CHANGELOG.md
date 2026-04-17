@@ -1,3 +1,5 @@
+- Add compatibility with mist 6.0.0
+
 ## v2.0.7 - 2025-12-24
 
 - Remove deprecations calls.
