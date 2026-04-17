@@ -1,3 +1,5 @@
+## v2.0.8 - 2026-04-17
+
 - Add compatibility with mist 6.0.0
 
 ## v2.0.7 - 2025-12-24
